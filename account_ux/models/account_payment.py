@@ -1,9 +1,13 @@
-from odoo import _, api, models
+
+from odoo import _, api, models, fields
 from odoo.exceptions import UserError
 
 
 class AccountPayment(models.Model):
     _inherit = "account.payment"
+
+    payment_method_description = fields.Char(
+        string="Payment Method Description")
 
     @api.onchange("available_journal_ids")
     def _onchange_available_journal_ids(self):
