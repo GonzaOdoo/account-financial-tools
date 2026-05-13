@@ -1,15 +1,14 @@
-from openupgradelib import openupgrade
+from odoo.upgrade import util
+import logging
+_logger = logging.getLogger(__name__)
+def migrate(cr, version):
+    _logger.info("Installing post-migration for account_ux")
+    env = util.env(cr)
 
-
-@openupgrade.migrate()
-def migrate(env, version):
-    """
-    Update account.journal_comp_rule domain_force
-    even if the rule is marked as noupdate.
-    """
-
-    # XML-ID de la regla original
-    rule = env.ref("account.journal_comp_rule", raise_if_not_found=False)
+    rule = env.ref(
+        "account.journal_comp_rule",
+        raise_if_not_found=False
+    )
 
     if not rule:
         return
@@ -22,9 +21,6 @@ def migrate(env, version):
         ('shared_to_branches', '=', True)
     ]"""
 
-    # write ignora noupdate
-    rule.write(
-        {
-            "domain_force": new_domain,
-        }
-    )
+    rule.write({
+        "domain_force": new_domain,
+    })
